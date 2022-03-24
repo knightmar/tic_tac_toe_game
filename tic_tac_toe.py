@@ -1,8 +1,34 @@
 import tkinter as tk
-from tkinter import ttk
-import threading
 
-# from utils_window import DebugWindow
+tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
+
+
+def check_victory():
+    #ligne 1
+    if tab[0][0] != -1 and tab[0][0] == tab[0][1] and tab[0][0] == tab[0][2]:
+        print("you win")
+    #ligne 2
+    elif tab[1][0] != -1 and tab[1][0] == tab[1][1] and tab[1][0] == tab[1][2]:
+        print("you win")
+    #ligne 3
+    elif tab[2][0] != -1 and tab[2][0] == tab[2][1] and tab[3][0] == tab[2][2]:
+        print("you win")
+    #colone 1
+    if tab[0][0] != -1 and tab[0][0] == tab[1][0] and tab[0][0] == tab[2][0]:
+        print("you win")
+    #colone 2
+    if tab[0][1] != -1 and tab[0][1] == tab[1][1] and tab[0][1] == tab[2][1]:
+        print("you win")
+    #colone 3
+    if tab[0][2] != -1 and tab[0][2] == tab[1][2] and tab[0][2] == tab[2][2]:
+        print("you win")
+
+
+
+def debug_clear():
+    app.field.create_rectangle(0, 0, 500, 500, fill="white")
+    drawGame()
+
 
 def drawGame():
     app.field.create_line(500 / 3, 0, 500 / 3, 600)
@@ -54,10 +80,14 @@ def drawCircles(line, column):
     x2 = x1 + 146.6
     y2 = y1 + 146.6
     app.field.create_oval(x1, y1, x2, y2, fill='red')
+    check_victory()
 
 
 app = tk.Tk()
+debug = tk.Tk()
+debug.geometry('100x40')
 
+debug.title("debug")
 app.title('tic tac toe')
 app.geometry('500x500')
 app.config(bg='#FFFFFF')
@@ -67,17 +97,11 @@ app.resizable(False, False)
 app.field = tk.Canvas(app, bg="white", width=600, height=500)
 app.field.bind("<Button-1>", getClicPos)
 app.field.pack()
+
+tk.Button(debug, text="clear", command=debug_clear).pack()
+
 drawGame()
 
 
+
 app.mainloop()
-
-
-
-
-# if __name__ == "__main__":
-#     appThread = threading.Thread(target=launchApp)
-#     appThread.start()
-#
-#     debugThread = threading.Thread(target=)
-#     debugThread.start()

@@ -12,4 +12,5 @@ debugWin.title("test")
 clear_btn = ttk.Button(debugWin, text="Clear button", command=clear)
 clear_btn.pack()
 
-debugWin.mainloop()
+def launch():
+    debugWin.mainloop()
