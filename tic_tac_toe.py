@@ -4,29 +4,32 @@ tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
 
 def check_victory():
-    #ligne 1
+    # ligne 1
     if tab[0][0] != -1 and tab[0][0] == tab[0][1] and tab[0][0] == tab[0][2]:
         print("you win")
-    #ligne 2
+    # ligne 2
     elif tab[1][0] != -1 and tab[1][0] == tab[1][1] and tab[1][0] == tab[1][2]:
         print("you win")
-    #ligne 3
-    elif tab[2][0] != -1 and tab[2][0] == tab[2][1] and tab[3][0] == tab[2][2]:
+    # ligne 3
+    elif tab[2][0] != -1 and tab[2][0] == tab[2][1] and tab[2][0] == tab[2][2]:
         print("you win")
-    #colone 1
+    # colone 1
     if tab[0][0] != -1 and tab[0][0] == tab[1][0] and tab[0][0] == tab[2][0]:
         print("you win")
-    #colone 2
+    # colone 2
     if tab[0][1] != -1 and tab[0][1] == tab[1][1] and tab[0][1] == tab[2][1]:
         print("you win")
-    #colone 3
+    # colone 3
     if tab[0][2] != -1 and tab[0][2] == tab[1][2] and tab[0][2] == tab[2][2]:
         print("you win")
 
 
-
 def debug_clear():
     app.field.create_rectangle(0, 0, 500, 500, fill="white")
+    for i in range(3):
+        for y in range(3):
+            tab[i][y] = -1
+    print(tab)
     drawGame()
 
 
@@ -42,8 +45,6 @@ def getClicPos(event):
     column = 0
     mouseX = event.x
     mouseY = event.y
-    print(mouseX)
-    print(mouseY)
     if 0 < mouseX < 500 / 3:
         column = 1
     elif 500 / 3 < mouseX < (500 / 3) * 2:
@@ -56,8 +57,7 @@ def getClicPos(event):
         line = 2
     elif (500 / 3) * 2 < mouseY < 500:
         line = 3
-    print("ligne = " + str(line))
-    print("column = " + str(column))
+    tab[line - 1][column - 1] = 0
     drawCircles(line, column)
 
 
@@ -101,7 +101,5 @@ app.field.pack()
 tk.Button(debug, text="clear", command=debug_clear).pack()
 
 drawGame()
-
-
 
 app.mainloop()
