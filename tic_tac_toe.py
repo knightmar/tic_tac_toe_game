@@ -1,5 +1,8 @@
 import tkinter as tk
 
+bloc_size = 166.6666666667
+total_size = 500
+
 tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
 
@@ -41,23 +44,29 @@ def drawGame():
 
 
 def getClicPos(event):
-    line = 0
-    column = 0
     mouseX = event.x
     mouseY = event.y
-    if 0 < mouseX < 500 / 3:
+    if mouseY == 0:
+        mouseY = 1
+    line = 0
+    column = 0
+
+    if 0 < mouseX < bloc_size:
         column = 1
-    elif 500 / 3 < mouseX < (500 / 3) * 2:
+    elif bloc_size < mouseX < bloc_size * 2:
         column = 2
-    elif (500 / 3) * 2 < mouseX < 500:
+    elif bloc_size * 2 < mouseX < total_size:
         column = 3
-    if 0 < mouseY < 500 / 3:
+    if 0 < mouseY < bloc_size:
         line = 1
-    elif 500 / 3 < mouseY < (500 / 3) * 2:
+    elif bloc_size < mouseY < bloc_size * 2:
         line = 2
-    elif (500 / 3) * 2 < mouseY < 500:
+    elif bloc_size * 2 < mouseY < total_size:
         line = 3
     tab[line - 1][column - 1] = 0
+    print(mouseX)
+    print(mouseY)
+    print("-" * 7)
     drawCircles(line, column)
 
 
@@ -67,15 +76,15 @@ def drawCircles(line, column):
     if line == 1:
         y1 = 10
     elif line == 2:
-        y1 = 500 / 3 + 10
+        y1 = bloc_size + 10
     elif line == 3:
-        y1 = (500 / 3) * 2 + 10
+        y1 = bloc_size * 2 + 10
     if column == 1:
         x1 = 10
     elif column == 2:
-        x1 = 500 / 3 + 10
+        x1 = bloc_size + 10
     elif column == 3:
-        x1 = (500 / 3) * 2 + 10
+        x1 = bloc_size * 2 + 10
 
     x2 = x1 + 146.6
     y2 = y1 + 146.6
