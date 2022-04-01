@@ -1,11 +1,24 @@
 import tkinter as tk
+import tkinter.ttk as ttk
 
 bloc_size = 166.6666666667
 total_size = 500
-
+launch_game_btn = ttk.Button()
+result = ttk.Label()
 wo_win = -1
 player_turn = 0
 tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
+
+
+def launchGame():
+    global tab
+    tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
+    app.field = tk.Canvas(app, bg="white", width=600, height=500)
+    app.field.bind("<Button-1>", getClicPos)
+    app.field.pack()
+    launch_game_btn.destroy()
+    result.destroy()
+    drawGame()
 
 
 def getPlayerToPlay():
@@ -18,6 +31,7 @@ def getPlayerToPlay():
 
 
 def transform(id):
+    global wo_win
     name = ""
     if id == -1:
         name = None
@@ -25,12 +39,20 @@ def transform(id):
         name = "O"
     elif id == 1:
         name = "X"
+    wo_win = name
     return name
 
 
 def show_results():
+    global wo_win
+    global result
+    global launch_game_btn
     app.field.create_rectangle(0, 0, 500, 500, fill="white")
-    app.field.create_text(133, 133, text="Bravo " + transform(tab[0][0]) + "! Vous avez gagné !" )
+    app.field.destroy()
+    result = ttk.Label(app, text="Bravo " + wo_win + "! Vous avez gagné !")
+    result.pack()
+    launch_game_btn = ttk.Button(app, text="Jouer a nouveau", command=launchGame)
+    launch_game_btn.pack()
 
 
 def check_victory():
@@ -41,13 +63,13 @@ def check_victory():
         # wo_win = transform(tab[0][0])
     # ligne 2
     elif tab[1][0] != -1 and tab[1][0] == tab[1][1] and tab[1][0] == tab[1][2]:
-        print("you win ," + transform(tab[0][0]))
+        print("you win ," + transform(tab[1][0]))
         show_results()
 
         # wo_win = transform(tab[0][0])
     # ligne 3
     elif tab[2][0] != -1 and tab[2][0] == tab[2][1] and tab[2][0] == tab[2][2]:
-        print("you win ," + transform(tab[0][0]))
+        print("you win ," + transform(tab[2][0]))
         show_results()
 
         # wo_win = transform(tab[0][0])
@@ -59,25 +81,23 @@ def check_victory():
         # wo_win = transform(tab[0][0])
     # colone 2
     if tab[0][1] != -1 and tab[0][1] == tab[1][1] and tab[0][1] == tab[2][1]:
-        print("you win ," + transform(tab[0][0]))
+        print("you win ," + transform(tab[0][1]))
         show_results()
 
         # wo_win = transform(tab[0][0])
     # colone 3
     if tab[0][2] != -1 and tab[0][2] == tab[1][2] and tab[0][2] == tab[2][2]:
+        print("you win ," + transform(tab[0][2]))
+        show_results()
+    # diagonale gauche
+    if tab[0][0] != -1 and tab[0][0] == tab[1][1] and tab[0][0] == tab[2][2]:
         print("you win ," + transform(tab[0][0]))
         show_results()
 
+    if tab[0][2] != -1 and tab[0][2] == tab[1][1] and tab[0][2] == tab[2][0]:
+        print("you win ," + transform(tab[0][2]))
+        show_results()
         # wo_win = transform(tab[0][0])
-
-
-def debug_clear():
-    app.field.create_rectangle(0, 0, 500, 500, fill="white")
-    for i in range(3):
-        for y in range(3):
-            tab[i][y] = -1
-    print(tab)
-    drawGame()
 
 
 def drawGame():
@@ -171,22 +191,12 @@ def drawCircles(line, column):
 
 
 app = tk.Tk()
-debug = tk.Tk()
-debug.geometry('100x40')
 
-debug.title("debug")
 app.title('tic tac toe')
 app.geometry('500x500')
 app.config(bg='#FFFFFF')
 
 app.resizable(False, False)
 
-app.field = tk.Canvas(app, bg="white", width=600, height=500)
-app.field.bind("<Button-1>", getClicPos)
-app.field.pack()
-
-tk.Button(debug, text="clear", command=debug_clear).pack()
-
-drawGame()
-
+launchGame()
 app.mainloop()
