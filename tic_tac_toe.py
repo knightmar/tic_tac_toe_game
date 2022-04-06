@@ -1,6 +1,8 @@
 import random
 import tkinter as tk
 import tkinter.ttk as ttk
+import tkinter.font
+import time
 
 bloc_size = 166.6666666667
 total_size = 500
@@ -10,7 +12,7 @@ print("player_turn " + str(player_turn))
 tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
 
-def launchGame():
+def launch_game():
     global tab
     global info_field
     tab = [[-1, -1, -1],
@@ -27,25 +29,18 @@ def launchGame():
     app.main_field = tk.Canvas(app, bg="white", width=600, height=500)
     info_field = tk.Canvas(app, bg="white", width=600, height=200)
 
-    app.main_field.bind("<Button-1>", getClicPos)
+    app.main_field.bind("<Button-1>", get_clic_pos)
     app.main_field.pack()
 
     info_field.pack()
+    font = tk.font.Font(size=20)
+    info_field.create_text(250, 100, text=": Votre tour", font=font)
 
-    # if player_turn == 0:
-    #     print(player_turn)
-    #     info_field.create_line(20, 20, 150, 150, width=2)
-    #     info_field.create_line(20, 150, 150, 20, width=2)
-    # if player_turn == 1:
-    #     print(player_turn)
-    #
-    #     info_field.create_oval(20, 20, 150, 150, fill='red')
-
-    drawGame()
-    showInfos()
+    draw_game()
+    show_infos()
 
 
-def showInfos():
+def show_infos():
     # if to_display == 1 or to_display == 0:
     #
     info_field.create_rectangle(10, 10, 170, 170, fill='white')
@@ -61,7 +56,7 @@ def showInfos():
         info_field.create_oval(20, 20, 150, 150, fill='red')
 
 
-def getPlayerToPlay():
+def get_player_to_play():
     global player_turn
     print(player_turn)
     if player_turn == 0:
@@ -85,6 +80,8 @@ def transform(id):
 
 
 def show_results():
+    print("show results")
+    time.sleep(1)
     global wo_win
     global result
     global launch_game_btn
@@ -94,11 +91,13 @@ def show_results():
     info_field.destroy()
     result = ttk.Label(app, text="Bravo " + wo_win + "! Vous avez gagné !", background='white')
     result.pack()
-    launch_game_btn = ttk.Button(app, text="Jouer a nouveau", command=launchGame)
+    launch_game_btn = ttk.Button(app, text="Jouer a nouveau", command=launch_game)
     launch_game_btn.pack()
 
 
 def check_victory():
+    print("after check")
+
     # ligne 1
     if tab[0][0] != -1 and tab[0][0] == tab[0][1] and tab[0][0] == tab[0][2]:
         print("you win ," + transform(tab[0][0]))
@@ -143,7 +142,7 @@ def check_victory():
         # wo_win = transform(tab[0][0])
 
 
-def drawGame():
+def draw_game():
     app.main_field.create_line(500 / 3, 0, 500 / 3, 600, width=2)
     app.main_field.create_line((500 / 3) * 2, 0, (500 / 3) * 2, 600, width=2)
     app.main_field.create_line(0, 500 / 3, 600, 500 / 3, width=2)
@@ -151,7 +150,7 @@ def drawGame():
     app.main_field.create_line(0, 501, 500, 501, width=2)
 
 
-def getClicPos(event):
+def get_clic_pos(event):
     # print("win :" + str(wo_win))
 
     mouseX = event.x
@@ -174,22 +173,17 @@ def getClicPos(event):
     elif bloc_size * 2 < mouseY < total_size:
         line = 3
 
-    player = getPlayerToPlay()
-    showInfos()
+    player = get_player_to_play()
+    show_infos()
     if player == 0:
         tab[line - 1][column - 1] = 0
-        drawCircles(line, column)
+        draw_circles(line, column)
     elif player == 1:
         tab[line - 1][column - 1] = 1
-        drawCross(line, column)
-    # print(player_turn)
-    #
-    # print(mouseX)
-    # print(mouseY)
-    # print("-" * 7)
+        draw_cross(line, column)
 
 
-def drawCross(line, column):
+def draw_cross(line, column):
     x1 = 0
     y1 = 0
     if line == 1:
@@ -209,11 +203,13 @@ def drawCross(line, column):
     y2 = y1 + 146.6
     app.main_field.create_line(x1, y1, x2, y2, width=5)
     app.main_field.create_line(x2, y1, x1, y2, width=5)
+    print("before check")
+
 
     check_victory()
 
 
-def drawCircles(line, column):
+def draw_circles(line, column):
     x1 = 0
     y1 = 0
     if line == 1:
@@ -232,6 +228,7 @@ def drawCircles(line, column):
     x2 = x1 + 146.6
     y2 = y1 + 146.6
     app.main_field.create_oval(x1, y1, x2, y2, fill='red')
+    print("before check")
     check_victory()
 
 
@@ -247,5 +244,5 @@ result = ttk.Label(app)
 
 info_field = tk.Canvas(app, bg="white", width=600, height=200)
 
-launchGame()
+launch_game()
 app.mainloop()
