@@ -1,10 +1,12 @@
+import random
 import tkinter as tk
 import tkinter.ttk as ttk
 
 bloc_size = 166.6666666667
 total_size = 500
 wo_win = -1
-player_turn = 0
+player_turn = random.randint(0, 1)
+print("player_turn " + str(player_turn))
 tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
 
@@ -20,7 +22,6 @@ def launchGame():
     if result.winfo_exists():
         result.destroy()
     if info_field.winfo_exists():
-        print("destroy info_field")
         info_field.destroy()
 
     app.main_field = tk.Canvas(app, bg="white", width=600, height=500)
@@ -31,17 +32,38 @@ def launchGame():
 
     info_field.pack()
 
+    # if player_turn == 0:
+    #     print(player_turn)
+    #     info_field.create_line(20, 20, 150, 150, width=2)
+    #     info_field.create_line(20, 150, 150, 20, width=2)
+    # if player_turn == 1:
+    #     print(player_turn)
+    #
+    #     info_field.create_oval(20, 20, 150, 150, fill='red')
 
     drawGame()
+    showInfos()
 
 
 def showInfos():
+    # if to_display == 1 or to_display == 0:
+    #
+    info_field.create_rectangle(10, 10, 170, 170, fill='white')
+    info_field.create_line(10, 10, 170, 10)
+    info_field.create_line(10, 170, 170, 170)
+    info_field.create_line(10, 10, 10, 170)
+    info_field.create_line(170, 10, 170, 170)
     if player_turn == 0:
-        pass
+        info_field.create_line(20, 20, 150, 150, width=2)
+        info_field.create_line(20, 150, 150, 20, width=2)
+
+    if player_turn == 1:
+        info_field.create_oval(20, 20, 150, 150, fill='red')
 
 
 def getPlayerToPlay():
     global player_turn
+    print(player_turn)
     if player_turn == 0:
         player_turn = 1
     elif player_turn == 1:
@@ -130,7 +152,7 @@ def drawGame():
 
 
 def getClicPos(event):
-    print("win :" + str(wo_win))
+    # print("win :" + str(wo_win))
 
     mouseX = event.x
     mouseY = event.y
@@ -153,17 +175,18 @@ def getClicPos(event):
         line = 3
 
     player = getPlayerToPlay()
+    showInfos()
     if player == 0:
         tab[line - 1][column - 1] = 0
         drawCircles(line, column)
     elif player == 1:
         tab[line - 1][column - 1] = 1
         drawCross(line, column)
-    print(player_turn)
-
-    print(mouseX)
-    print(mouseY)
-    print("-" * 7)
+    # print(player_turn)
+    #
+    # print(mouseX)
+    # print(mouseY)
+    # print("-" * 7)
 
 
 def drawCross(line, column):
@@ -221,7 +244,6 @@ app.resizable(False, False)
 
 launch_game_btn = ttk.Button(app)
 result = ttk.Label(app)
-
 
 info_field = tk.Canvas(app, bg="white", width=600, height=200)
 
