@@ -3,7 +3,6 @@ import tkinter.ttk as ttk
 
 bloc_size = 166.6666666667
 total_size = 500
-
 wo_win = -1
 player_turn = 0
 tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
@@ -11,17 +10,34 @@ tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
 def launchGame():
     global tab
+    global info_field
     tab = [[-1, -1, -1],
            [-1, -1, -1],
            [-1, -1, -1]]
-    app.field = tk.Canvas(app, bg="white", width=600, height=500)
-    app.field.bind("<Button-1>", getClicPos)
-    app.field.pack()
+
     if launch_game_btn.winfo_exists():
         launch_game_btn.destroy()
     if result.winfo_exists():
         result.destroy()
+    if info_field.winfo_exists():
+        print("destroy info_field")
+        info_field.destroy()
+
+    app.main_field = tk.Canvas(app, bg="white", width=600, height=500)
+    info_field = tk.Canvas(app, bg="white", width=600, height=200)
+
+    app.main_field.bind("<Button-1>", getClicPos)
+    app.main_field.pack()
+
+    info_field.pack()
+
+
     drawGame()
+
+
+def showInfos():
+    if player_turn == 0:
+        pass
 
 
 def getPlayerToPlay():
@@ -50,8 +66,10 @@ def show_results():
     global wo_win
     global result
     global launch_game_btn
-    # app.field.create_rectangle(0, 0, 500, 500, fill="white")
-    app.field.destroy()
+    app.main_field.create_rectangle(0, 0, 500, 500, fill="white")
+    app.main_field.destroy()
+    info_field.create_rectangle(0, 0, 500, 500, fill="white")
+    info_field.destroy()
     result = ttk.Label(app, text="Bravo " + wo_win + "! Vous avez gagné !", background='white')
     result.pack()
     launch_game_btn = ttk.Button(app, text="Jouer a nouveau", command=launchGame)
@@ -104,10 +122,11 @@ def check_victory():
 
 
 def drawGame():
-    app.field.create_line(500 / 3, 0, 500 / 3, 600)
-    app.field.create_line((500 / 3) * 2, 0, (500 / 3) * 2, 600)
-    app.field.create_line(0, 500 / 3, 600, 500 / 3)
-    app.field.create_line(0, (500 / 3) * 2, 600, (500 / 3) * 2)
+    app.main_field.create_line(500 / 3, 0, 500 / 3, 600, width=2)
+    app.main_field.create_line((500 / 3) * 2, 0, (500 / 3) * 2, 600, width=2)
+    app.main_field.create_line(0, 500 / 3, 600, 500 / 3, width=2)
+    app.main_field.create_line(0, (500 / 3) * 2, 600, (500 / 3) * 2, width=2)
+    app.main_field.create_line(0, 501, 500, 501, width=2)
 
 
 def getClicPos(event):
@@ -165,8 +184,8 @@ def drawCross(line, column):
 
     x2 = x1 + 146.6
     y2 = y1 + 146.6
-    app.field.create_line(x1, y1, x2, y2, width=5)
-    app.field.create_line(x2, y1, x1, y2, width=5)
+    app.main_field.create_line(x1, y1, x2, y2, width=5)
+    app.main_field.create_line(x2, y1, x1, y2, width=5)
 
     check_victory()
 
@@ -189,19 +208,22 @@ def drawCircles(line, column):
 
     x2 = x1 + 146.6
     y2 = y1 + 146.6
-    app.field.create_oval(x1, y1, x2, y2, fill='red')
+    app.main_field.create_oval(x1, y1, x2, y2, fill='red')
     check_victory()
 
 
 app = tk.Tk()
 app.title('tic tac toe')
-app.geometry('500x500')
+app.geometry('500x700')
 app.config(bg='#FFFFFF')
 
 app.resizable(False, False)
 
 launch_game_btn = ttk.Button(app)
 result = ttk.Label(app)
+
+
+info_field = tk.Canvas(app, bg="white", width=600, height=200)
 
 launchGame()
 app.mainloop()
