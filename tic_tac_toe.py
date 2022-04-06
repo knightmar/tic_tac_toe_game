@@ -3,8 +3,7 @@ import tkinter.ttk as ttk
 
 bloc_size = 166.6666666667
 total_size = 500
-launch_game_btn = ttk.Button()
-result = ttk.Label()
+
 wo_win = -1
 player_turn = 0
 tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
@@ -12,12 +11,16 @@ tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
 
 def launchGame():
     global tab
-    tab = [[-1, -1, -1], [-1, -1, -1], [-1, -1, -1]]
+    tab = [[-1, -1, -1],
+           [-1, -1, -1],
+           [-1, -1, -1]]
     app.field = tk.Canvas(app, bg="white", width=600, height=500)
     app.field.bind("<Button-1>", getClicPos)
     app.field.pack()
-    launch_game_btn.destroy()
-    result.destroy()
+    if launch_game_btn.winfo_exists():
+        launch_game_btn.destroy()
+    if result.winfo_exists():
+        result.destroy()
     drawGame()
 
 
@@ -47,9 +50,9 @@ def show_results():
     global wo_win
     global result
     global launch_game_btn
-    app.field.create_rectangle(0, 0, 500, 500, fill="white")
+    # app.field.create_rectangle(0, 0, 500, 500, fill="white")
     app.field.destroy()
-    result = ttk.Label(app, text="Bravo " + wo_win + "! Vous avez gagné !")
+    result = ttk.Label(app, text="Bravo " + wo_win + "! Vous avez gagné !", background='white')
     result.pack()
     launch_game_btn = ttk.Button(app, text="Jouer a nouveau", command=launchGame)
     launch_game_btn.pack()
@@ -191,12 +194,14 @@ def drawCircles(line, column):
 
 
 app = tk.Tk()
-
 app.title('tic tac toe')
 app.geometry('500x500')
 app.config(bg='#FFFFFF')
 
 app.resizable(False, False)
+
+launch_game_btn = ttk.Button(app)
+result = ttk.Label(app)
 
 launchGame()
 app.mainloop()
